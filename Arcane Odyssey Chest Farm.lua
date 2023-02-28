@@ -1,18 +1,17 @@
 local player = game.Players.LocalPlayer;
 
---//Platform/no fall\\--
-local part = Instance.new("Part", workspace);
-part.Anchored = true
-part.Size = Vector3.new(5, .001, 5);
-
+local Index; Index = hookmetamethod(game, "__index", function(i, v)
+    if v == "Velocity" then
+        i.Velocity = Vector3.new(0,0,0)
+    end;
+    return Index(i, v);
+end);
 
 game:GetService("RunService").Stepped:Connect(function()
 if shared.chestFarm then
     for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
         if v:IsA("BasePart") and v.CanCollide then
                 v.CanCollide = false
-                game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3.02, 0)
             end;
         end;
     end;
@@ -40,7 +39,7 @@ function Target(target)
 	end;
 end;
 
-while shared.chestFarm and task.wait(5) do pcall(function()
+while shared.chestFarm and task.wait(5) do
 for i,v in pairs(game.Workspace:GetDescendants()) do
     if table.find(shared.priority, v.Name) and magCheck(v:FindFirstChild("Base"), v:FindFirstChild("Base")) and not v:FindFirstChild("Open") then
             Target(v:FindFirstChild("Base").CFrame);
@@ -53,9 +52,8 @@ for i,v in pairs(game.Workspace:GetDescendants()) do
                 Target(v:FindFirstChild("Base").CFrame);
                 if (player.Character:FindFirstChild("HumanoidRootPart").Position - v:FindFirstChild("Base").Position).magnitude <= 10 and v.Base:FindFirstChild("Prompt") then
                     fireproximityprompt(v.Base:FindFirstChild("Prompt"))
-                    end;
                 end;
             end;
         end;
-    end);
+    end;
 end;
