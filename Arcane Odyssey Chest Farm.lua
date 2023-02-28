@@ -9,15 +9,23 @@ local Index; Index = hookmetamethod(game, "__index", function(i, v)
     return Index(i, v);
 end);
 
+--//Games weird\\--
+local part = Instance.new("Part", workspace);
+part.Anchored = true
+part.Size = Vector3.new(5, .001, 5);
+
+
 game:GetService("RunService").Stepped:Connect(function()
 if shared.chestFarm then
     for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
         if v:IsA("BasePart") and v.CanCollide then
                 v.CanCollide = false
+                part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3.02, 0)
             end;
         end;
     end;
 end);
+
 
 local function magCheck(part, tmpPart) --//Getting closests part to part but scuffed
     local firstCheck = (player.Character:FindFirstChild("HumanoidRootPart").Position - part.Position).magnitude
